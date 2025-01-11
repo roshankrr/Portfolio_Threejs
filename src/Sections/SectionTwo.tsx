@@ -1,7 +1,6 @@
 import { Text, useGLTF, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
-import { radians } from "three/tsl";
 
 export const SectionTwo = ({ z }: { z: number }) => {
   const gltf = useGLTF("/human.glb");

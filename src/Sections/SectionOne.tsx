@@ -1,4 +1,4 @@
-import { OrbitControls, Environment, Text } from "@react-three/drei";
+import { Environment, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 export const SectionOne = ({ z }: any) => {
