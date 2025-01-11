@@ -1,18 +1,18 @@
 import { useRef, useState } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { Plane, Text } from "@react-three/drei";
-import project1Img from "../assets/project1.jpeg";
-import project2Img from "../assets/project2.jpeg";
-import project3Img from "../assets/project3.jpeg";
-import project4Img from "../assets/project4.jpeg";
-import project5Img from "../assets/project5.jpeg";
-import project6Img from "../assets/project6.jpeg";
-import project7Img from "../assets/project7.jpeg";
-import project8Img from "../assets/project8.jpeg";
-import project9Img from "../assets/project9.jpeg";
-import project10Img from "../assets/project10.jpeg";
-import project11Img from "../assets/project11.jpeg";
-import project12Img from "../assets/project12.jpeg";
+import project1Img from "../../public/images/Project1.jpeg";
+import project2Img from "../../public/images/project2.jpeg";
+import project3Img from "../../public/images/project3.jpeg";
+import project4Img from "../../public/images/project4.jpeg";
+import project5Img from "../../public/images/project5.jpeg";
+import project6Img from "../../public/images/project6.jpeg";
+import project7Img from "../../public/images/project7.jpeg";
+import project8Img from "../../public/images/project8.jpeg";
+import project9Img from "../../public/images/project9.jpeg";
+import project10Img from "../../public/images/project10.jpeg";
+import project11Img from "../../public/images/project11.jpeg";
+import project12Img from "../../public/images/project12.jpeg";
 import { TextureLoader } from "three";
 
 export const SectionThree = ({ z }: { z: number }) => {
