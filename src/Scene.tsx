@@ -5,27 +5,44 @@ import { SectionSix } from "./Sections/SectionSix";
 import { SectionThree } from "./Sections/SectionThree";
 import { SectionTwo } from "./Sections/SectionTwo";
 import { useThree } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Scene = () => {
   const { camera } = useThree();
+  const [touchStart, setTouchStart] = useState(0);
 
   useEffect(() => {
     camera.position.z = 505;
 
-    // Prevent default scrolling behavior
-    const preventDefault = (e: Event) => {
+    const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
+      camera.position.z += e.deltaY * 0.1;
     };
 
-    document.addEventListener("wheel", preventDefault, { passive: false });
-    document.addEventListener("touchmove", preventDefault, { passive: false });
+    const handleTouchStart = (e: TouchEvent) => {
+      setTouchStart(e.touches[0].clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const touchEnd = e.touches[0].clientY;
+      const delta = touchStart - touchEnd;
+      camera.position.z += delta * 0.1;
+      setTouchStart(touchEnd);
+    };
+
+    document.addEventListener("wheel", handleWheel, { passive: false });
+    document.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
-      document.removeEventListener("wheel", preventDefault);
-      document.removeEventListener("touchmove", preventDefault);
+      document.removeEventListener("wheel", handleWheel);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [camera]);
+  }, [camera, touchStart]);
 
   return (
     <>
