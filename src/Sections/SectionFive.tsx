@@ -1,6 +1,6 @@
 import { Text, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export const SectionFive = ({ z }: { z: number }) => {
   const gltf = useGLTF("/macbook.glb");
@@ -12,6 +12,50 @@ export const SectionFive = ({ z }: { z: number }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isHovered, setIsHovered] = useState<string | null>(null);
+  const [isInputActive, setIsInputActive] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!isInputActive) return;
+
+      if (e.key === "Enter") {
+        setIsInputActive(null);
+        return;
+      }
+
+      if (e.key === "Backspace") {
+        switch (isInputActive) {
+          case "name":
+            setName((prev) => prev.slice(0, -1));
+            break;
+          case "email":
+            setEmail((prev) => prev.slice(0, -1));
+            break;
+          case "message":
+            setMessage((prev) => prev.slice(0, -1));
+            break;
+        }
+        return;
+      }
+
+      if (e.key.length === 1) {
+        switch (isInputActive) {
+          case "name":
+            setName((prev) => prev + e.key);
+            break;
+          case "email":
+            setEmail((prev) => prev + e.key);
+            break;
+          case "message":
+            setMessage((prev) => prev + e.key);
+            break;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [isInputActive]);
 
   useFrame((_, delta) => {
     if (leftGroupRef.current) {
@@ -31,11 +75,12 @@ export const SectionFive = ({ z }: { z: number }) => {
   });
 
   const handleSubmit = () => {
-    console.log({ name, email, message });
-    // Handle form submission
-    setName("");
-    setEmail("");
-    setMessage("");
+    if (name && email && message) {
+      console.log({ name, email, message });
+      setName("");
+      setEmail("");
+      setMessage("");
+    }
   };
 
   return (
@@ -43,101 +88,127 @@ export const SectionFive = ({ z }: { z: number }) => {
       <group position={[0, 0, z]}>
         {/* Left Section */}
         <group
-          // ref={leftGroupRef}
+          ref={leftGroupRef}
           position={[-5, -2, 0]}
           rotation={[0, baseRotation, 0]}
         >
           <primitive object={gltf.scene} castShadow />
         </group>
 
-        {/* Right Section - Contact Form */}
+        {/* Right Section - Form */}
         <group position={[5, 0, 0]}>
-          <Text color="Black" position={[0, 2, 0]} fontSize={0.7}>
-            Contact Me
-          </Text>
+          {/* Form Background */}
+          <mesh position={[0, 0, -0.1]}>
+            <boxGeometry args={[7, 10, 0.2]} />
+            <meshStandardMaterial
+              color="skyblue"
+              metalness={1}
+              roughness={0.3}
+            />
+          </mesh>
 
-          {/* Name Input */}
-          <group position={[0, 1, 0]}>
-            <Text
-              color="Black"
-              position={[-1.5, 0, 0]}
-              fontSize={0.3}
-              anchorX="left"
-            >
-              Name:
+          {/* Form Header */}
+          <group position={[0, 3, 0]}>
+            <Text color="#333" fontSize={0.6} anchorX="center">
+              Contact Form
             </Text>
-            <mesh
-              position={[0, -0.1, 0]}
-              onPointerOver={() => setIsHovered("name")}
-              onPointerOut={() => setIsHovered(null)}
-              onClick={() => setName("User input would go here")}
-            >
-              <planeGeometry args={[3, 0.4]} />
-              <meshStandardMaterial
-                color={isHovered === "name" ? "#e0e0e0" : "white"}
-              />
-            </mesh>
           </group>
 
-          {/* Email Input */}
-          <group position={[0, 0, 0]}>
-            <Text
-              color="Black"
-              position={[-1.5, 0, 0]}
-              fontSize={0.3}
-              anchorX="left"
-            >
-              Email:
-            </Text>
-            <mesh
-              position={[0, -0.1, 0]}
-              onPointerOver={() => setIsHovered("email")}
-              onPointerOut={() => setIsHovered(null)}
-              onClick={() => setEmail("user@example.com")}
-            >
-              <planeGeometry args={[3, 0.4]} />
-              <meshStandardMaterial
-                color={isHovered === "email" ? "#e0e0e0" : "white"}
-              />
-            </mesh>
-          </group>
+          {/* Form Fields */}
+          <group position={[0, 1.5, 0]}>
+            {/* Name Field */}
+            <group position={[0, 0.5, 0]}>
+              <Text
+                color="#444"
+                position={[-2.5, 0, 0]}
+                fontSize={0.4}
+                anchorX="left"
+              >
+                Name:
+              </Text>
+              <mesh
+                position={[0, -0.3, 0]}
+                onPointerOver={() => setIsHovered("name")}
+                onPointerOut={() => setIsHovered(null)}
+                onClick={() => setIsInputActive("name")}
+              >
+                <planeGeometry args={[4.5, 0.8]} />
+                <meshStandardMaterial
+                  color={isInputActive === "name" ? "#e3f2fd" : "white"}
+                />
+              </mesh>
+              <Text position={[0, -0.3, 0.1]} fontSize={0.35} anchorX="center">
+                {name || (isInputActive === "name" ? "_" : "")}
+              </Text>
+            </group>
 
-          {/* Message Input */}
-          <group position={[0, -1.2, 0]}>
-            <Text
-              color="Black"
-              position={[-1.5, 0, 0]}
-              fontSize={0.3}
-              anchorX="left"
-            >
-              Message:
-            </Text>
-            <mesh
-              position={[0, -0.5, 0]}
-              onPointerOver={() => setIsHovered("message")}
-              onPointerOut={() => setIsHovered(null)}
-              onClick={() => setMessage("Your message here")}
-            >
-              <planeGeometry args={[3, 1]} />
-              <meshStandardMaterial
-                color={isHovered === "message" ? "#e0e0e0" : "white"}
-              />
-            </mesh>
+            {/* Email Field */}
+            <group position={[0, -1, 0]}>
+              <Text
+                color="#444"
+                position={[-2.5, 0, 0]}
+                fontSize={0.4}
+                anchorX="left"
+              >
+                Email:
+              </Text>
+              <mesh
+                position={[0, -0.3, 0]}
+                onPointerOver={() => setIsHovered("email")}
+                onPointerOut={() => setIsHovered(null)}
+                onClick={() => setIsInputActive("email")}
+              >
+                <planeGeometry args={[4.5, 0.8]} />
+                <meshStandardMaterial
+                  color={isInputActive === "email" ? "#e3f2fd" : "white"}
+                />
+              </mesh>
+              <Text position={[0, -0.3, 0.1]} fontSize={0.35} anchorX="center">
+                {email || (isInputActive === "email" ? "_" : "")}
+              </Text>
+            </group>
+
+            {/* Message Field */}
+            <group position={[0, -3, 0]}>
+              <Text
+                color="#444"
+                position={[-2.5, 0, 0]}
+                fontSize={0.4}
+                anchorX="left"
+              >
+                Message:
+              </Text>
+              <mesh
+                position={[0, -0.8, 0]}
+                onPointerOver={() => setIsHovered("message")}
+                onPointerOut={() => setIsHovered(null)}
+                onClick={() => setIsInputActive("message")}
+              >
+                <planeGeometry args={[4.5, 2]} />
+                <meshStandardMaterial
+                  color={isInputActive === "message" ? "#e3f2fd" : "white"}
+                />
+              </mesh>
+              <Text position={[0, -0.8, 0.1]} fontSize={0.35} anchorX="center">
+                {message || (isInputActive === "message" ? "_" : "")}
+              </Text>
+            </group>
           </group>
 
           {/* Submit Button */}
-          <group position={[0, -2.5, 0]}>
+          <group position={[0, -4, 0]}>
             <mesh
+              position={[0, 0, 0]}
               onPointerOver={() => setIsHovered("submit")}
               onPointerOut={() => setIsHovered(null)}
               onClick={handleSubmit}
             >
-              <planeGeometry args={[1.5, 0.4]} />
+              <boxGeometry args={[2, 0.8, 0.2]} />
               <meshStandardMaterial
-                color={isHovered === "submit" ? "#4CAF50" : "#45a049"}
+                color={isHovered === "submit" ? "#2196f3" : "#1976d2"}
               />
             </mesh>
-            <Text color="white" position={[0, 0, 0.1]} fontSize={0.2}>
+            <Text position={[0, 0, 0.2]} color="white" fontSize={0.4}>
               Submit
             </Text>
           </group>
