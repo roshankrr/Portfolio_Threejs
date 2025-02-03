@@ -1,3 +1,4 @@
+"use client";
 import { SectionFive } from "./Sections/SectionFive";
 import { SectionFour } from "./Sections/SectionFour";
 import { SectionOne } from "./Sections/SectionOne";
@@ -5,13 +6,22 @@ import { SectionSix } from "./Sections/SectionSix";
 import { SectionThree } from "./Sections/SectionThree";
 import { SectionTwo } from "./Sections/SectionTwo";
 import { useThree } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Scene = () => {
   const { camera } = useThree();
+  const [touchStartY, setTouchStartY] = useState(0);
+  const [swipeAction, setSwipeAction] = useState(() => () => {
+    /* default empty action */
+  });
+
+  const handleResize = () => {
+    camera.position.z = window.innerWidth <= 768 ? 512 : 505;
+  };
 
   useEffect(() => {
-    camera.position.z = 505;
+    // Set initial camera position based on screen size
+    handleResize();
 
     // Prevent default scrolling behavior
     const preventDefault = (e: Event) => {
@@ -19,11 +29,17 @@ const Scene = () => {
     };
 
     document.addEventListener("wheel", preventDefault, { passive: false });
-    document.addEventListener("touchmove", preventDefault, { passive: false });
+    document.addEventListener("ontouchmove", preventDefault, {
+      passive: false,
+    });
+
+    // Add resize event listener
+    window.addEventListener("resize", handleResize);
 
     return () => {
       document.removeEventListener("wheel", preventDefault);
-      document.removeEventListener("touchmove", preventDefault);
+      document.removeEventListener("ontouchmove", preventDefault);
+      window.removeEventListener("resize", handleResize);
     };
   }, [camera]);
 
