@@ -16,6 +16,8 @@ export const SectionFour = ({ z }: { z: number }) => {
 
     const handleTouchMove = (event: TouchEvent) => {
       const touch = event.touches[0];
+      alert(touch.clientY);
+
       camera.position.z += touch.clientY * 0.015; // Adjust the multiplier as needed
     };
 
