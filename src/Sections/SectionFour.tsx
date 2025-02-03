@@ -16,9 +16,11 @@ export const SectionFour = ({ z }: { z: number }) => {
 
     const handleTouchMove = (event: TouchEvent) => {
       const touch = event.touches[0];
-      alert(touch.clientY);
-
-      camera.position.z += touch.clientY * 0.015; // Adjust the multiplier as needed
+      console.log(touch.clientY - 500);
+      if (touch.clientY - 500 > 0) camera.position.z += touch.clientY * 0.001;
+      else {
+        camera.position.z -= touch.clientY * 0.001; // Adjust the multiplier as needed
+      }
     };
 
     window.addEventListener("wheel", handleWheel);
