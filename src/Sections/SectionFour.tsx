@@ -14,13 +14,16 @@ export const SectionFour = ({ z }: { z: number }) => {
       camera.position.z += event.deltaY * 0.015;
     };
 
+    let lastClientY = 0; // Move the variable declaration outside the function to retain its value
     const handleTouchMove = (event: TouchEvent) => {
       const touch = event.touches[0];
-      console.log(touch.clientY - 500);
-      if (touch.clientY - 500 > 0) camera.position.z += touch.clientY * 0.001;
-      else {
-        camera.position.z -= touch.clientY * 0.001; // Adjust the multiplier as needed
+      console.log(touch.clientY, lastClientY);
+      if (lastClientY === 0) {
+        lastClientY = touch.clientY; // Initialize lastClientY on the first touch
       }
+      const deltaY = touch.clientY - lastClientY; // Calculate the difference
+      camera.position.z += deltaY * 0.2; // Move camera based on the difference
+      lastClientY = touch.clientY; // Update lastClientY after processing
     };
 
     window.addEventListener("wheel", handleWheel);
