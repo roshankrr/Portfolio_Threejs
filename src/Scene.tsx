@@ -12,7 +12,7 @@ const Scene = () => {
   const { camera } = useThree();
 
   const handleResize = () => {
-    camera.position.z = window.innerWidth <= 768 ? 512 : 505;
+    camera.position.z = window.innerWidth <= 768 ? 515 : 505;
   };
 
   useEffect(() => {
