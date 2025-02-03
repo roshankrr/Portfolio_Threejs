@@ -6,14 +6,10 @@ import { SectionSix } from "./Sections/SectionSix";
 import { SectionThree } from "./Sections/SectionThree";
 import { SectionTwo } from "./Sections/SectionTwo";
 import { useThree } from "@react-three/fiber";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Scene = () => {
   const { camera } = useThree();
-  const [touchStartY, setTouchStartY] = useState(0);
-  const [swipeAction, setSwipeAction] = useState(() => () => {
-    /* default empty action */
-  });
 
   const handleResize = () => {
     camera.position.z = window.innerWidth <= 768 ? 512 : 505;
