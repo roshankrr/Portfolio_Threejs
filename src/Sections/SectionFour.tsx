@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Text } from "@react-three/drei";
+import { Text, useTexture } from "@react-three/drei";
 
 export const SectionFour = ({ z }: { z: number }) => {
   const cubesRef = useRef<any[]>([]);
@@ -18,18 +18,76 @@ export const SectionFour = ({ z }: { z: number }) => {
   }, [camera]);
 
   const cubes = [
-    { title: "Cube 1", position: [-4, 2, z + 0] },
-    { title: "Cube 2", position: [-4, -2, z + 20] },
-    { title: "Cube 3", position: [-4, 2, z + 40] },
-    { title: "Cube 4", position: [-4, -2, z + 60] },
-    { title: "Cube 5", position: [4, 2, z + 10] },
-    { title: "Cube 6", position: [4, -2, z + 30] },
-    { title: "Cube 7", position: [4, 2, z + 50] },
-    { title: "Cube 8", position: [4, -2, z + 70] },
-    { title: "Cube 9", position: [-4, 2, z + 80] },
-    { title: "Cube 10", position: [-4, -2, z + 100] },
-    { title: "Cube 11", position: [4, 2, z + 90] },
-    { title: "Cube 12", position: [4, -2, z + 110] },
+    {
+      title: "Cube 1",
+      image: "/tech_skills/photoshop.webp",
+      position: [-4, 2, z + 0],
+    },
+    {
+      title: "Cube 2",
+      image: "/tech_skills/canva.jpeg",
+      position: [-4, -2, z + 20],
+    },
+    {
+      title: "Cube 3",
+      image: "/tech_skills/adobe_illustrator.avif",
+      position: [-4, 2, z + 40],
+    },
+    {
+      title: "Cube 4",
+      image: "/tech_skills/mongodb.png",
+      position: [-4, -2, z + 60],
+    },
+    {
+      title: "Cube 5",
+      image: "/tech_skills/nodejs.jpg",
+      position: [4, 2, z + 10],
+    },
+    {
+      title: "Cube 6",
+      image: "/tech_skills/reactjs.jpeg",
+      position: [4, -2, z + 30],
+    },
+    {
+      title: "Cube 7",
+      image: "/tech_skills/threejs.png",
+      position: [4, 2, z + 50],
+    },
+    {
+      title: "Cube 8",
+      image: "/tech_skills/typescript.png",
+      position: [4, -2, z + 70],
+    },
+    {
+      title: "Cube 9",
+      image: "/tech_skills/gsap.png",
+      position: [-4, 2, z + 80],
+    },
+    {
+      title: "Cube 10",
+      image: "/tech_skills/cpp.webp",
+      position: [-4, -2, z + 100],
+    },
+    {
+      title: "Cube 11",
+      image: "/tech_skills/tailwind.png",
+      position: [4, 2, z + 90],
+    },
+    {
+      title: "Cube 12",
+      image: "/tech_skills/express.png",
+      position: [4, -2, z + 110],
+    },
+    {
+      title: "Cube 13",
+      image: "/tech_skills/nextjs.jpeg",
+      position: [-4, 2, z + 120],
+    },
+    {
+      title: "Cube 14",
+      image: "/tech_skills/javascript.svg",
+      position: [4, 2, z + 130],
+    },
   ];
 
   useFrame((state) => {
@@ -120,7 +178,7 @@ export const SectionFour = ({ z }: { z: number }) => {
   return (
     <group onClick={handleBackgroundClick}>
       <Text
-        position={[0, 0, z + 120]}
+        position={[0, 0, z + 150]}
         fontSize={1}
         color="black"
         anchorX="center"
@@ -128,36 +186,30 @@ export const SectionFour = ({ z }: { z: number }) => {
       >
         Tech Skills
       </Text>
-      {cubes.map((cube, index) => (
-        <group
-          key={index}
-          position={[cube.position[0], cube.position[1], cube.position[2]]}
-          ref={(el) => (cubesRef.current[index] = el)}
-          onPointerEnter={() => !isTransitioning && setHoveredIndex(index)}
-          onPointerLeave={() => !isTransitioning && setHoveredIndex(null)}
-          onClick={() => handleCubeClick(index)}
-        >
-          <mesh>
-            <boxGeometry args={[2, 2, 2]} />
-            <meshStandardMaterial
-              color={hoveredIndex === index ? "hotpink" : "skyblue"}
-              metalness={0.8}
-              roughness={0.2}
-              transparent
-              opacity={1}
-            />
-          </mesh>
-          {/* <Text
-            position={[0, -1.5, 0]}
-            fontSize={0.3}
-            color="black"
-            anchorX="center"
-            anchorY="middle"
+      {cubes.map((cube, index) => {
+        const texture = useTexture(cube.image);
+        return (
+          <group
+            key={index}
+            position={[cube.position[0], cube.position[1], cube.position[2]]}
+            ref={(el) => (cubesRef.current[index] = el)}
+            onPointerEnter={() => !isTransitioning && setHoveredIndex(index)}
+            onPointerLeave={() => !isTransitioning && setHoveredIndex(null)}
+            onClick={() => handleCubeClick(index)}
           >
-            {cube.title}
-          </Text> */}
-        </group>
-      ))}
+            <mesh>
+              <boxGeometry args={[2, 2, 2]} />
+              <meshStandardMaterial
+                map={texture}
+                metalness={0.8}
+                roughness={0.2}
+                transparent
+                opacity={1}
+              />
+            </mesh>
+          </group>
+        );
+      })}
     </group>
   );
 };
