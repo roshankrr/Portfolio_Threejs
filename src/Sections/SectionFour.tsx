@@ -8,32 +8,45 @@ export const SectionFour = ({ z }: { z: number }) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { camera } = useThree();
+  const lastClientYRef = useRef(0); // Using ref to persist touch position
+  const cameraZRef = useRef(camera.position.z); // Track camera Z position
 
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      camera.position.z += event.deltaY * 0.015;
+      cameraZRef.current += event.deltaY * 0.015;
+      camera.position.z = cameraZRef.current;
     };
 
-    let lastClientY = 0; // Move the variable declaration outside the function to retain its value
+    const handleTouchStart = (event: TouchEvent) => {
+      lastClientYRef.current = event.touches[0].clientY;
+    };
+
     const handleTouchMove = (event: TouchEvent) => {
       const touch = event.touches[0];
-      console.log(touch.clientY, lastClientY);
-      if (lastClientY === 0) {
-        lastClientY = touch.clientY; // Initialize lastClientY on the first touch
-      }
-      const deltaY = touch.clientY - lastClientY; // Calculate the difference
-      camera.position.z += deltaY * 0.2; // Move camera based on the difference
-      lastClientY = touch.clientY; // Update lastClientY after processing
+      const deltaY = touch.clientY - lastClientYRef.current;
+
+      // Update camera position using ref value
+      cameraZRef.current += deltaY * 0.2;
+      camera.position.z = cameraZRef.current;
+
+      // Update last position
+      lastClientYRef.current = touch.clientY;
     };
 
     window.addEventListener("wheel", handleWheel);
+    window.addEventListener("touchstart", handleTouchStart);
     window.addEventListener("touchmove", handleTouchMove);
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
     };
   }, [camera]);
+  useFrame((state) => {
+    // Update cameraZRef with the current camera position
+    cameraZRef.current = state.camera.position.z;
+  });
 
   const cubes = [
     {
