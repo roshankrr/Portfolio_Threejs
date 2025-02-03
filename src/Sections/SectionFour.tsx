@@ -11,10 +11,21 @@ export const SectionFour = ({ z }: { z: number }) => {
 
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      camera.position.z += event.deltaY * 0.01;
+      camera.position.z += event.deltaY * 0.015;
     };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      const touch = event.touches[0];
+      camera.position.z += touch.clientY * 0.015; // Adjust the multiplier as needed
+    };
+
     window.addEventListener("wheel", handleWheel);
-    return () => window.removeEventListener("wheel", handleWheel);
+    window.addEventListener("touchmove", handleTouchMove);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
   }, [camera]);
 
   const cubes = [
