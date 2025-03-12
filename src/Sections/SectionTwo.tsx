@@ -119,6 +119,12 @@ export const SectionTwo = ({ z }: { z: number }) => {
               position={[-1, -1, 0]}
               onPointerOver={() => setLinkedInHovered(true)}
               onPointerOut={() => setLinkedInHovered(false)}
+              onClick={() =>
+                window.open(
+                  "https://www.linkedin.com/in/roshan-kumar-09b143205/",
+                  "_linkedIn"
+                )
+              }
             >
               <boxGeometry args={[1, 1, 1]} />
               <meshStandardMaterial
@@ -132,6 +138,9 @@ export const SectionTwo = ({ z }: { z: number }) => {
               position={[0.5, -1, 0]}
               onPointerOver={() => setGithubHovered(true)}
               onPointerOut={() => setGithubHovered(false)}
+              onClick={() =>
+                window.open("https://github.com/roshankrr", "_github")
+              }
             >
               <boxGeometry args={[1, 1, 1]} />
               <meshStandardMaterial
@@ -145,6 +154,12 @@ export const SectionTwo = ({ z }: { z: number }) => {
               position={[2, -1, 0]}
               onPointerOver={() => setInstaHovered(true)}
               onPointerOut={() => setInstaHovered(false)}
+              onClick={() =>
+                window.open(
+                  "https://www.instagram.com/roshan_k_y?igsh=MWF6Yzh3czBvZG5qdw==",
+                  "_insta"
+                )
+              }
             >
               <boxGeometry args={[1, 1, 1]} />
               <meshStandardMaterial

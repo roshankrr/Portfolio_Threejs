@@ -26,61 +26,73 @@ export const SectionThree = ({ z }: { z: number }) => {
       title: "Project 1",
       position: [-4, 2, z + 0],
       image: project1Img,
+      link: "https://roshankrr.github.io/Upflares_projectt/",
     },
     {
       title: "Project 2",
       position: [-4, -2, z + 5],
       image: project2Img,
+      link: "https://example.com/project2",
     },
     {
       title: "Project 3",
       position: [-4, 2, z + 10],
       image: project3Img,
+      link: "https://uber-hospital-4ikz15mpp-roshan-kumars-projects-6bfd45a7.vercel.app/",
     },
     {
       title: "Project 4",
       position: [-4, -2, z + 15],
       image: project4Img,
+      link: "https://sahaara-app.vercel.app/",
     },
     {
       title: "Project 5",
       position: [4, 2, z + 0],
       image: project5Img,
+      link: "https://avikya.vercel.app/",
     },
     {
       title: "Project 6",
       position: [4, -2, z + 5],
       image: project6Img,
+      link: "https://portfolio-threejs-one-teal.vercel.app/",
     },
     {
       title: "Project 7",
       position: [4, 2, z + 10],
       image: project7Img,
+      link: "https://jobsco-rho.vercel.app/",
     },
     {
       title: "Project 8",
       position: [4, -2, z + 15],
       image: project8Img,
+      link: "https://reviewsmatter-ui.vercel.app/",
     },
     {
       title: "Project 9",
       position: [-4, 2, z + 20],
       image: project9Img,
+      link: "https://recipy-api.vercel.app/",
     },
     {
       title: "Project 10",
       position: [-4, -2, z + 25],
       image: project10Img,
+      link: "https://otchi-clone.vercel.app/",
     },
     {
       title: "Project 11",
       position: [4, 2, z + 20],
       image: project11Img,
+      link: "https://apple-website-clone-mu-ruby.vercel.app/",
     },
     {
       title: "Project 12",
       position: [4, -2, z + 25],
       image: project12Img,
+      link: "https://uberbyroshan.vercel.app/",
     },
   ];
 
@@ -186,21 +198,35 @@ export const SectionThree = ({ z }: { z: number }) => {
         >
           <Plane args={[3, 2]}>
             <meshStandardMaterial
-              //   color="#444444"
               metalness={1}
               roughness={0.5}
               map={useLoader(TextureLoader, project.image)}
             />
           </Plane>
-          {/* <Text
-            position={[0, -0.6, 0.1]}
-            fontSize={0.3}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-          >
-            {project.title}
-          </Text> */}
+          {selectedIndex === index && !isTransitioning && (
+            <group position={[0, -1.5, 0]}>
+              <Text
+                position={[-1, 0, 0.1]}
+                fontSize={0.3}
+                color="black"
+                anchorX="center"
+                anchorY="middle"
+                onClick={() => setSelectedIndex(null)}
+              >
+                Close
+              </Text>
+              <Text
+                position={[1, 0, 0.1]}
+                fontSize={0.3}
+                color="black"
+                anchorX="center"
+                anchorY="middle"
+                onClick={() => window.open(project.link, "_blank")}
+              >
+                Visit
+              </Text>
+            </group>
+          )}
         </group>
       ))}
     </group>

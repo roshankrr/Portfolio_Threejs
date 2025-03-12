@@ -1,4 +1,4 @@
-import { Text, useGLTF } from "@react-three/drei";
+import { Html, Text, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 
@@ -196,6 +196,9 @@ export const SectionFive = ({ z }: { z: number }) => {
                 Contact Form
               </Text>
             </group>
+            <Html center position={[0, 4, 0]} occlude transform>
+              <h1 className="text-black">HEllo</h1>
+            </Html>
 
             {/* Form Fields */}
             <group position={[0, 1.5, 0]}>
